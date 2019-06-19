@@ -117,9 +117,10 @@ void MainWindow::on_actionUpdate_triggered()
     draw();
 }
 
-void MainWindow::on_horizontalSlider_sliderMoved(int /*position*/)
+void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
     draw();
+    ui->lineEdit->setText(QString::number(position));
 }
 
 void MainWindow::on_doubleSpinBox_valueChanged(double/* arg1*/)
@@ -176,3 +177,8 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
+
+void MainWindow::on_lineEdit_textChanged(const QString &arg1)
+{
+    //ui->horizontalSlider->setValue(arg1.toInt());
+}

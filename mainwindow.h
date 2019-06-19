@@ -39,6 +39,8 @@ private slots:
     void on_pushButton_clicked();//Draw couple curve
 
 
+    void on_lineEdit_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     FourBarLinkage fourBarLinkage;
