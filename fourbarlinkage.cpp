@@ -34,7 +34,7 @@ FourBarLinkage::Type FourBarLinkage::getType()
         return Type::grashof_type3;
 }
 
-QPair<double, double> FourBarLinkage::compute(double theta2)
+QPair<double, double> FourBarLinkage::compute(double theta2, Configuration conf)
 {
     auto a = l2;
     auto b = l3;
@@ -47,14 +47,21 @@ QPair<double, double> FourBarLinkage::compute(double theta2)
     auto A = (1.0 - k2) * std::cos(theta2) - k1 + k3;
     auto B = -2.0*std::sin(theta2);
     auto C= k1 -(k2+1)*std::cos(theta2) + k3;
-    auto theta4 = 2.0 * std::atan((-B-std::sqrt(B*B-4.0*A*C)) / (2.0*A));
 
     auto k4 = d/b;
     auto k5 = (c*c - d*d - a*a - b*b)/(2.0*a*b);
     auto D = (1+k4)*std::cos(theta2) - k1 + k5;
     auto E = C;
     auto F = k1 + (k4-1)*std::cos(theta2) + k5;
-    auto theta3 = 2.0 * std::atan((-E-std::sqrt(E*E-4.0*D*F)) / (2.0*D));
+
+    double theta3, theta4;
+    if (conf == Configuration::open) {
+        theta4 = 2.0 * std::atan((-B-std::sqrt(B*B-4.0*A*C)) / (2.0*A));
+        theta3 = 2.0 * std::atan((-E-std::sqrt(E*E-4.0*D*F)) / (2.0*D));
+    } else if (conf == Configuration::close) {
+        theta4 = 2.0 * std::atan((-B+std::sqrt(B*B-4.0*A*C)) / (2.0*A));
+        theta3 = 2.0 * std::atan((-E+std::sqrt(E*E-4.0*D*F)) / (2.0*D));
+    }
 
     //qDebug() << "theta4 grad" << theta4*180.0/3.1416;
     return QPair<double,double>(theta4,theta3);
