@@ -49,10 +49,16 @@ void MainWindow::draw()
 void MainWindow::draw(double ang)
 {
     auto theta2 = ang;
-    QVector<QPointF> R = fourBarLinkage.getPositions(theta2);
+    FourBarLinkage::Configuration conf;
+    if (ui->radioButton->isChecked()){
+        conf = FourBarLinkage::Configuration::open;
+    } else {
+        conf = FourBarLinkage::Configuration::close;
+    }
+    QVector<QPointF> R = fourBarLinkage.getPositions(theta2, conf);
 
     auto l5 = ui->doubleSpinBox_5->value();
-    auto beta = ui->doubleSpinBox_6->value()*3.1416/180.0;
+    auto beta = ui->doubleSpinBox_6->value()*M_PI/180.0;
     auto theta3 = std::atan2((R[2]-R[1]).y(), (R[2]-R[1]).x());
 
     QPointF P(l5*std::cos(beta+theta3), l5*std::sin(beta+theta3));
@@ -119,7 +125,7 @@ void MainWindow::on_actionUpdate_triggered()
 
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
-    draw();
+    draw(position);
     ui->lineEdit->setText(QString::number(position));
 }
 
@@ -166,9 +172,17 @@ void MainWindow::on_pushButton_clicked()
 {
     QVector<QPointF> points;
     auto l5 = ui->doubleSpinBox_5->value();
-    auto beta = ui->doubleSpinBox_6->value()*3.1416/180.0;
+    auto beta = ui->doubleSpinBox_6->value()*M_PI/180.0;
     auto scene = ui->graphicsView->scene();
-    fourBarLinkage.computeCouplerPoints(l5, beta, points);
+
+    FourBarLinkage::Configuration conf;
+    if (ui->radioButton->isChecked()){
+        conf = FourBarLinkage::Configuration::open;
+    } else {
+        conf = FourBarLinkage::Configuration::close;
+    }
+
+    fourBarLinkage.computeCouplerPoints(l5, beta, points, conf);
 
     if (coupler == nullptr) {
         coupler = scene->addPolygon(QPolygonF(points));

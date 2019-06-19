@@ -26,9 +26,9 @@ public:
     Type getType();
 
     QPair<double,double> compute(double theta2, Configuration conf=open); //Return theta3, theta4 tuple
-    QVector<QPointF> getPositions(double theta2); //returns O2 O4 A B
+    QVector<QPointF> getPositions(double theta2, Configuration conf=open); //returns O2 O4 A B
     QString typeToString(Type t);
-    void computeCouplerPoints(double l5, double beta, /*OUT*/ QVector<QPointF> &spoints_out, int points=360);
+    void computeCouplerPoints(double l5, double beta, /*OUT*/ QVector<QPointF> &spoints_out, Configuration conf=open, int points=360);
 
     void safe_file(QString path);
     void load_file(QString path);

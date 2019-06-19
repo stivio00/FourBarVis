@@ -189,3 +189,5 @@ DISTFILES += \
     resources/icons/qbe/showSymbol.png \
     resources/icons/qbe/up.svg \
     resources/win.rc
+
+OTHER_FILES += README.MD

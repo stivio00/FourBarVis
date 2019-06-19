@@ -67,10 +67,10 @@ QPair<double, double> FourBarLinkage::compute(double theta2, Configuration conf)
     return QPair<double,double>(theta4,theta3);
 }
 
-QVector<QPointF> FourBarLinkage::getPositions(double theta2)
+QVector<QPointF> FourBarLinkage::getPositions(double theta2, Configuration conf)
 {
     theta2 = theta2*3.1416/180.0;
-    auto thetas = compute(theta2); //needs a rad argument
+    auto thetas = compute(theta2, conf); //needs a rad argument
     //auto theta3 = thetas.second;
     auto theta4 = thetas.first;
 
@@ -94,7 +94,7 @@ QString FourBarLinkage::typeToString(FourBarLinkage::Type t)
 
 }
 
-void FourBarLinkage::computeCouplerPoints(double l5, double beta, QVector<QPointF> &points_out, int points)
+void FourBarLinkage::computeCouplerPoints(double l5, double beta, QVector<QPointF> &points_out, Configuration conf, int points)
 {
     /* non-entraant function */
     QVector<QPointF> R;
@@ -102,7 +102,7 @@ void FourBarLinkage::computeCouplerPoints(double l5, double beta, QVector<QPoint
     double theta3, theta2 = 0.0;
 
     for (int i = 0; i < 360; i++) {
-        R = getPositions(theta2);
+        R = getPositions(theta2, conf);
         theta3 = std::atan2((R[2]-R[1]).y(), (R[2]-R[1]).x());
         points_out[i] = QPointF(l5*std::cos(beta+theta3), l5*std::sin(beta+theta3)) + R[1];
         theta2 += 1.0;

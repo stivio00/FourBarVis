@@ -453,6 +453,13 @@
          </widget>
         </item>
         <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QWidget" name="widget_9" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_8">
            <property name="spacing">
@@ -462,13 +469,13 @@
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>0</number>
+            <number>6</number>
            </property>
            <property name="rightMargin">
             <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>6</number>
            </property>
            <item>
             <widget class="QSlider" name="horizontalSlider">
