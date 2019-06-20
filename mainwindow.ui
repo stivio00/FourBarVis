@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>384</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -477,6 +477,13 @@
            <property name="bottomMargin">
             <number>6</number>
            </property>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>θ2</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QSlider" name="horizontalSlider">
              <property name="minimumSize">

@@ -19,7 +19,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
 private slots:
     void update();
     void draw();
@@ -35,10 +34,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_doubleSpinBox_3_valueChanged(double arg1);
     void on_actionExit_triggered();
-
     void on_pushButton_clicked();//Draw couple curve
-
-
     void on_lineEdit_textChanged(const QString &arg1);
 
 private:

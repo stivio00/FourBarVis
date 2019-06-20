@@ -38,7 +38,7 @@ void MainWindow::update()
                            ui->doubleSpinBox_2->value(),
                            ui->doubleSpinBox_3->value(),
                            ui->doubleSpinBox_4->value());
-
+    ui->label_5->setText("Grashof type: "+fourBarLinkage.typeToString(fourBarLinkage.getType()));
 }
 
 void MainWindow::draw()
@@ -119,7 +119,6 @@ void MainWindow::nextStep()
 void MainWindow::on_actionUpdate_triggered()
 {
     update();
-    ui->label_5->setText("Grashof type: "+fourBarLinkage.typeToString(fourBarLinkage.getType()));
     draw();
 }
 
@@ -196,3 +195,5 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
     //ui->horizontalSlider->setValue(arg1.toInt());
 }
+
+
