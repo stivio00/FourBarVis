@@ -51,6 +51,16 @@ private slots:
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
 
+    void on_lineEdit_2_editingFinished();
+
+    void on_lineEdit_3_editingFinished();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_4_clicked();
+
 private:
     Ui::MainWindow *ui;
     FourBarLinkage fourBarLinkage;
@@ -58,6 +68,8 @@ private:
     QGraphicsEllipseItem *circleA, *circleB, *circleO2, *circleO4, *circleP;
     QGraphicsTextItem *textA, *textB, *textO2, *textO4, *textP;
     QTimer *timer;
+    double delta_theta2;
+    double zoom;
 };
 
 #endif // MAINWINDOW_H

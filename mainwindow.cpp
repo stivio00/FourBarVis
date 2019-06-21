@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    delta_theta2 = 1.0;
+    zoom = 1.0;
     ui->setupUi(this);
     poli = nullptr;
     coupler = nullptr;
@@ -113,8 +115,8 @@ void MainWindow::draw(double ang)
 
 void MainWindow::nextStep()
 {
-    ui->horizontalSlider->setValue(ui->horizontalSlider->value()+1);
-    if(ui->horizontalSlider->value() >= 360)
+    ui->horizontalSlider->setValue(ui->horizontalSlider->value()+static_cast<int>(delta_theta2));
+    if(ui->horizontalSlider->value() >= 360.0)
         ui->horizontalSlider->setValue(0);
     draw();
 }
@@ -126,7 +128,6 @@ void MainWindow::save_file(const QString& file_name)
     fourBarLinkage.serialize(file);
     file.flush();
     file.close();
-    qDebug()<<"SAVE ME";
 }
 
 void MainWindow::open_file(const QString& file_name)
@@ -222,21 +223,25 @@ void MainWindow::on_lineEdit_textChanged(const QString& /*&arg1*/)
 void MainWindow::on_radioButton_toggled(bool /*checked*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_doubleSpinBox_5_valueChanged(const QString &/*arg1*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_doubleSpinBox_6_valueChanged(const QString &/*arg1*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_doubleSpinBox_valueChanged(const QString &/*arg1*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_doubleSpinBox_2_valueChanged(const QString &/*arg1*/)
@@ -247,11 +252,13 @@ void MainWindow::on_doubleSpinBox_2_valueChanged(const QString &/*arg1*/)
 void MainWindow::on_doubleSpinBox_3_valueChanged(const QString &/*arg1*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_doubleSpinBox_4_valueChanged(const QString &/*arg1*/)
 {
     update();
+    draw();
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -270,4 +277,39 @@ void MainWindow::on_actionOpen_triggered()
     dialog.setAcceptMode(QFileDialog::AcceptMode::AcceptOpen);
     connect(&dialog, &QFileDialog::fileSelected,this, &MainWindow::open_file);
     dialog.exec();
+}
+
+void MainWindow::on_lineEdit_2_editingFinished()
+{
+    delta_theta2 = ui->lineEdit_2->text().toDouble();
+    ui->label_12->setText("speed: "+QString::number(delta_theta2/(timer->interval())*1000)+" grad/s");
+}
+
+void MainWindow::on_lineEdit_3_editingFinished()
+{
+    timer->setInterval(ui->lineEdit_3->text().toInt());
+    ui->label_12->setText("speed: "+QString::number(delta_theta2/(timer->interval())*1000)+" grad/s");
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    zoom += 0.05;
+    QMatrix s(zoom,0,0,-zoom,0,0);
+    ui->graphicsView->setMatrix(s);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    zoom -= 0.05;
+    QMatrix s(zoom,0,0,-zoom,0,0);
+    ui->graphicsView->setMatrix(s);
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    zoom = 1;
+    QMatrix s(zoom,0,0,-zoom,0,0);
+    ui->graphicsView->setMatrix(s);
+    //ui->graphicsView->scene()->clear();
+    //poli = nullptr;
 }
