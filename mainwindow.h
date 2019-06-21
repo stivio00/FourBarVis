@@ -25,6 +25,9 @@ private slots:
     void draw(double ang);
     void nextStep();
 
+    void save_file(const QString& file);
+    void open_file(const QString& file);
+
     void on_actionUpdate_triggered();
     void on_horizontalSlider_sliderMoved(int position);
     void on_doubleSpinBox_valueChanged(double arg1);
@@ -36,6 +39,17 @@ private slots:
     void on_actionExit_triggered();
     void on_pushButton_clicked();//Draw couple curve
     void on_lineEdit_textChanged(const QString &arg1);
+
+    void on_radioButton_toggled(bool checked);
+    void on_doubleSpinBox_5_valueChanged(const QString &arg1);
+    void on_doubleSpinBox_6_valueChanged(const QString &arg1);
+    void on_doubleSpinBox_valueChanged(const QString &arg1);
+    void on_doubleSpinBox_2_valueChanged(const QString &arg1);
+    void on_doubleSpinBox_3_valueChanged(const QString &arg1);
+    void on_doubleSpinBox_4_valueChanged(const QString &arg1);
+
+    void on_actionSave_triggered();
+    void on_actionOpen_triggered();
 
 private:
     Ui::MainWindow *ui;

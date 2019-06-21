@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>213</height>
+    <width>487</width>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Four Bar Linkage Visualizer v0.1 &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Stephen Krol &amp;lt;stephen.krol@utp.ac.pa&amp;gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;2019&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;use Qt 5.13&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Four Bar Linkage Visualizer v0.1 &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simple application used to generate &amp;lt;&amp;lt;Four Bar&amp;gt;&amp;gt; mechanism animations&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Author: Stephen Krol &amp;lt;stephen.krol@utp.ac.pa&amp;gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Universidad Tecnologica de Panama (UTP) 2019 &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Facultad de Ingenieria Mecanica&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Made with Qt 5.13&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

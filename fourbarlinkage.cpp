@@ -7,7 +7,7 @@
 
 FourBarLinkage::FourBarLinkage()
 {
-
+    configuration = Configuration::open;
 }
 
 void FourBarLinkage::setSize(double _l1, double _l2, double _l3, double _l4)
@@ -16,6 +16,17 @@ void FourBarLinkage::setSize(double _l1, double _l2, double _l3, double _l4)
     this->l2 = _l2;
     this->l3 = _l3;
     this->l4 = _l4;
+}
+
+void FourBarLinkage::setCouplerSize(double _l5, double _beta)
+{
+    this->l5 = _l5;
+    this->beta = _beta;
+}
+
+void FourBarLinkage::setConfiguration(FourBarLinkage::Configuration _conf)
+{
+    this->configuration = _conf;
 }
 
 FourBarLinkage::Type FourBarLinkage::getType()
@@ -34,7 +45,7 @@ FourBarLinkage::Type FourBarLinkage::getType()
         return Type::grashof_type3;
 }
 
-QPair<double, double> FourBarLinkage::compute(double theta2, Configuration conf)
+QPair<double, double> FourBarLinkage::compute(double theta2)
 {
     auto a = l2;
     auto b = l3;
@@ -51,14 +62,14 @@ QPair<double, double> FourBarLinkage::compute(double theta2, Configuration conf)
     auto k4 = d/b;
     auto k5 = (c*c - d*d - a*a - b*b)/(2.0*a*b);
     auto D = (1+k4)*std::cos(theta2) - k1 + k5;
-    auto E = C;
+    auto E = B;
     auto F = k1 + (k4-1)*std::cos(theta2) + k5;
 
     double theta3, theta4;
-    if (conf == Configuration::open) {
+    if (configuration == Configuration::open) {
         theta4 = 2.0 * std::atan((-B-std::sqrt(B*B-4.0*A*C)) / (2.0*A));
         theta3 = 2.0 * std::atan((-E-std::sqrt(E*E-4.0*D*F)) / (2.0*D));
-    } else if (conf == Configuration::close) {
+    } else if (configuration == Configuration::close) {
         theta4 = 2.0 * std::atan((-B+std::sqrt(B*B-4.0*A*C)) / (2.0*A));
         theta3 = 2.0 * std::atan((-E+std::sqrt(E*E-4.0*D*F)) / (2.0*D));
     }
@@ -67,10 +78,10 @@ QPair<double, double> FourBarLinkage::compute(double theta2, Configuration conf)
     return QPair<double,double>(theta4,theta3);
 }
 
-QVector<QPointF> FourBarLinkage::getPositions(double theta2, Configuration conf)
+QVector<QPointF> FourBarLinkage::getPositions(double theta2)
 {
-    theta2 = theta2*3.1416/180.0;
-    auto thetas = compute(theta2, conf); //needs a rad argument
+    theta2 = theta2*M_PI/180.0;
+    auto thetas = compute(theta2); //needs a rad argument
     //auto theta3 = thetas.second;
     auto theta4 = thetas.first;
 
@@ -94,29 +105,33 @@ QString FourBarLinkage::typeToString(FourBarLinkage::Type t)
 
 }
 
-void FourBarLinkage::computeCouplerPoints(double l5, double beta, QVector<QPointF> &points_out, Configuration conf, int points)
+void FourBarLinkage::serialize(QFile &file)
 {
-    /* non-entraant function */
+    QString out_string = "%1,%2,%3,%4,%5,%6";
+    out_string = out_string.arg(QString::number(l1),
+                                QString::number(l2),
+                                QString::number(l3),
+                                QString::number(l4),
+                                QString::number(l5),
+                                QString::number(beta));
+    //qDebug() << out_string;
+    QByteArray out = out_string.toLatin1();
+    file.write(out);
+}
+
+void FourBarLinkage::computeCouplerPoints(QVector<QPointF> &points_out, int points)
+{
+    /* non-reentrant function */
     QVector<QPointF> R;
     points_out.resize(points);
     double theta3, theta2 = 0.0;
 
     for (int i = 0; i < 360; i++) {
-        R = getPositions(theta2, conf);
+        R = getPositions(theta2);
         theta3 = std::atan2((R[2]-R[1]).y(), (R[2]-R[1]).x());
         points_out[i] = QPointF(l5*std::cos(beta+theta3), l5*std::sin(beta+theta3)) + R[1];
         theta2 += 1.0;
         //qDebug() << i << " theta2:" << theta2 << " PointP: "<< points_out[i];
     }
-}
-
-void FourBarLinkage::safe_file(QString path)
-{
-
-}
-
-void FourBarLinkage::load_file(QString path)
-{
-
 }
 

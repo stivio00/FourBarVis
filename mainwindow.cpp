@@ -8,6 +8,7 @@
 
 #include <QDebug>
 #include <QPaintEngine>
+#include <QFileDialog>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     coupler = nullptr;
     ui->graphicsView->setScene(new QGraphicsScene(ui->graphicsView));
     ui->graphicsView->setMatrix(QMatrix(1,0,0,-1,0,0));
-
+    ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
     timer = new QTimer(this);
     timer->setInterval(5);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(nextStep()));
@@ -34,11 +35,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::update()
 {
-    fourBarLinkage.setSize(ui->doubleSpinBox->value(),
-                           ui->doubleSpinBox_2->value(),
-                           ui->doubleSpinBox_3->value(),
-                           ui->doubleSpinBox_4->value());
+    fourBarLinkage.setSize(ui->doubleSpinBox->value(), //l1
+                           ui->doubleSpinBox_2->value(),//l2
+                           ui->doubleSpinBox_3->value(),//l3
+                           ui->doubleSpinBox_4->value());//l4
+    fourBarLinkage.setCouplerSize(ui->doubleSpinBox_5->value(),
+                                  ui->doubleSpinBox_6->value()*M_PI/180.0);
+    if (ui->radioButton->isChecked()){
+        fourBarLinkage.setConfiguration(FourBarLinkage::Configuration::open);
+    } else {
+        fourBarLinkage.setConfiguration(FourBarLinkage::Configuration::close);
+    }
     ui->label_5->setText("Grashof type: "+fourBarLinkage.typeToString(fourBarLinkage.getType()));
+    ui->statusBar->showMessage("UPDATED");
 }
 
 void MainWindow::draw()
@@ -49,13 +58,7 @@ void MainWindow::draw()
 void MainWindow::draw(double ang)
 {
     auto theta2 = ang;
-    FourBarLinkage::Configuration conf;
-    if (ui->radioButton->isChecked()){
-        conf = FourBarLinkage::Configuration::open;
-    } else {
-        conf = FourBarLinkage::Configuration::close;
-    }
-    QVector<QPointF> R = fourBarLinkage.getPositions(theta2, conf);
+    QVector<QPointF> R = fourBarLinkage.getPositions(theta2);
 
     auto l5 = ui->doubleSpinBox_5->value();
     auto beta = ui->doubleSpinBox_6->value()*M_PI/180.0;
@@ -105,7 +108,7 @@ void MainWindow::draw(double ang)
         circleP->setVisible(true);
     }
 
-    ui->statusBar->showMessage("theta2:"+QString::number(ang));
+    ui->statusBar->showMessage("Ready");
 }
 
 void MainWindow::nextStep()
@@ -114,6 +117,33 @@ void MainWindow::nextStep()
     if(ui->horizontalSlider->value() >= 360)
         ui->horizontalSlider->setValue(0);
     draw();
+}
+
+void MainWindow::save_file(const QString& file_name)
+{
+    QFile file(file_name);
+    file.open(QFile::OpenModeFlag::WriteOnly);
+    fourBarLinkage.serialize(file);
+    file.flush();
+    file.close();
+    qDebug()<<"SAVE ME";
+}
+
+void MainWindow::open_file(const QString& file_name)
+{
+    QFile file(file_name);
+    file.open(QFile::OpenModeFlag::ReadOnly);
+    QString in = QString::fromLatin1(file.readAll());
+    auto list = in.split(",");
+    qDebug() << list;
+    ui->doubleSpinBox->setValue(list.at(0).toDouble());
+    ui->doubleSpinBox_2->setValue(list.at(1).toDouble());
+    ui->doubleSpinBox_3->setValue(list.at(2).toDouble());
+    ui->doubleSpinBox_4->setValue(list.at(3).toDouble());
+    ui->doubleSpinBox_5->setValue(list.at(4).toDouble());
+    ui->doubleSpinBox_6->setValue(list.at(5).toDouble());
+    file.close();
+    qDebug()<<"OPEN ME";
 }
 
 void MainWindow::on_actionUpdate_triggered()
@@ -170,18 +200,9 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_pushButton_clicked()
 {
     QVector<QPointF> points;
-    auto l5 = ui->doubleSpinBox_5->value();
-    auto beta = ui->doubleSpinBox_6->value()*M_PI/180.0;
+    update();
     auto scene = ui->graphicsView->scene();
-
-    FourBarLinkage::Configuration conf;
-    if (ui->radioButton->isChecked()){
-        conf = FourBarLinkage::Configuration::open;
-    } else {
-        conf = FourBarLinkage::Configuration::close;
-    }
-
-    fourBarLinkage.computeCouplerPoints(l5, beta, points, conf);
+    fourBarLinkage.computeCouplerPoints(points);
 
     if (coupler == nullptr) {
         coupler = scene->addPolygon(QPolygonF(points));
@@ -191,9 +212,62 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
-void MainWindow::on_lineEdit_textChanged(const QString &arg1)
+void MainWindow::on_lineEdit_textChanged(const QString& /*&arg1*/)
 {
     //ui->horizontalSlider->setValue(arg1.toInt());
 }
 
 
+
+void MainWindow::on_radioButton_toggled(bool /*checked*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_5_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_6_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_2_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_3_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_doubleSpinBox_4_valueChanged(const QString &/*arg1*/)
+{
+    update();
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+
+    QFileDialog dialog;
+    dialog.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
+    connect(&dialog, &QFileDialog::fileSelected,this, &MainWindow::save_file);
+    dialog.exec();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::FileMode::ExistingFiles);
+    dialog.setAcceptMode(QFileDialog::AcceptMode::AcceptOpen);
+    connect(&dialog, &QFileDialog::fileSelected,this, &MainWindow::open_file);
+    dialog.exec();
+}

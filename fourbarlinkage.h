@@ -5,6 +5,7 @@
 #include <QPair>
 #include <QPointF>
 #include <QVector>
+#include <QFile>
 
 class FourBarLinkage
 {
@@ -23,21 +24,27 @@ public:
 
     FourBarLinkage();
     void setSize(double _l1, double _l2, double _l3, double _l4);
+    void setCouplerSize(double _l5, double _beta);
+    void setConfiguration(Configuration _conf);
+
     Type getType();
 
-    QPair<double,double> compute(double theta2, Configuration conf=open); //Return theta3, theta4 tuple
-    QVector<QPointF> getPositions(double theta2, Configuration conf=open); //returns O2 O4 A B
-    QString typeToString(Type t);
-    void computeCouplerPoints(double l5, double beta, /*OUT*/ QVector<QPointF> &spoints_out, Configuration conf=open, int points=360);
+    QPair<double,double> compute(double theta2); //Return theta3, theta4 tuple
+    QVector<QPointF> getPositions(double theta2); //returns O2 O4 A B
+    void computeCouplerPoints(/*OUT*/ QVector<QPointF> &spoints_out, int points=360);
 
-    void safe_file(QString path);
-    void load_file(QString path);
+    QString typeToString(Type t);
+    void serialize(QFile& file);
 
 private:
+    Configuration configuration;
     double l1;
     double l2;
     double l3;
     double l4;
+    /* coupler data */
+    double l5;
+    double beta;
 };
 
 #endif // FOURBARLINKAGE_H

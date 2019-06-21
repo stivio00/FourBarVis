@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>399</height>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -453,6 +453,16 @@
          </widget>
         </item>
         <item>
+         <widget class="QWidget" name="widget_10" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>6</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="Line" name="line_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -566,7 +576,20 @@
         </item>
        </layout>
       </widget>
-      <widget class="QGraphicsView" name="graphicsView"/>
+      <widget class="QGraphicsView" name="graphicsView">
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="renderHints">
+        <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+       </property>
+       <property name="dragMode">
+        <enum>QGraphicsView::ScrollHandDrag</enum>
+       </property>
+       <property name="resizeAnchor">
+        <enum>QGraphicsView::AnchorUnderMouse</enum>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -577,7 +600,7 @@
      <x>0</x>
      <y>0</y>
      <width>663</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -621,8 +644,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionUpdate"/>
-   <addaction name="separator"/>
    <addaction name="actionPlay"/>
    <addaction name="actionStop"/>
   </widget>
