@@ -68,10 +68,10 @@ QPair<double, double> FourBarLinkage::compute(double theta2)
     double theta3, theta4;
     if (configuration == Configuration::open) {
         theta4 = 2.0 * std::atan((-B-std::sqrt(B*B-4.0*A*C)) / (2.0*A));
-        theta3 = 2.0 * std::atan((-E-std::sqrt(E*E-4.0*D*F)) / (2.0*D));
+        theta3 = 2.0 * std::atan((-E-std::sqrt((E*E)-4.0*D*F)) / (2.0*D));
     } else if (configuration == Configuration::close) {
         theta4 = 2.0 * std::atan((-B+std::sqrt(B*B-4.0*A*C)) / (2.0*A));
-        theta3 = 2.0 * std::atan((-E+std::sqrt(E*E-4.0*D*F)) / (2.0*D));
+        theta3 = 2.0 * std::atan((-E+std::sqrt((E*E)-4.0*D*F)) / (2.0*D));
     }
 
     //qDebug() << "theta4 grad" << theta4*180.0/3.1416;
@@ -88,7 +88,7 @@ QVector<QPointF> FourBarLinkage::getPositions(double theta2)
     using namespace std;
 
     QPointF O2 {0.0 ,0.0};
-    QPointF O4 {l4, 0.0};
+    QPointF O4 {l1, 0.0};
     QPointF A {l2 * cos(theta2), l2 * sin(theta2)};
     QPointF B {l4 * cos(theta4), l4 * sin(theta4)};
     return QVector<QPointF> {O2,A,B+O4,O4};
