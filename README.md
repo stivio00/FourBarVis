@@ -1,6 +1,6 @@
 # FourBarVis
 Four-bar linkage simulation software. Implemented in C++ with Qt 5.*
-The positions are computed using close solutions and no numerical methods. 
+The positions are computed using close solutions and not numerical methods. 
 
 
 ## Screenshot
